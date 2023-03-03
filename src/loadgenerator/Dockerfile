@@ -18,7 +18,8 @@ FROM base as builder
 
 COPY requirements.txt .
 
-RUN pip install --prefix="/install" -r requirements.txt
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
+    && pip install --prefix="/install" -r requirements.txt
 
 FROM base
 

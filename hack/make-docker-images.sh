@@ -22,7 +22,7 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 log() { echo "$1" >&2; }
 
 TAG=0.0.1
-REPO_PREFIX=
+REPO_PREFIX=fanqiliang
 
 TAG="${TAG:?TAG env variable must be specified}"
 REPO_PREFIX="${REPO_PREFIX:?REPO_PREFIX env variable must be specified}"
