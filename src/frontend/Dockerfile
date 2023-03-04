@@ -25,6 +25,10 @@ COPY . .
 
 # Skaffold passes in debug-oriented compiler flags
 ARG SKAFFOLD_GO_GCFLAGS
+ENV ELASTIC_APM_SERVICE_NAME=frontend
+ENV ELASTIC_APM_SERVER_URL=http://10.110.203.209:8200
+ENV ELASTIC_APM_SECRET_TOKEN=elastic
+RUN go mod tidy
 RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /go/bin/frontend .
 
 FROM alpine:3.17.2@sha256:69665d02cb32192e52e07644d76bc6f25abeb5410edc1c7a81a10ba3f0efb90a as release
@@ -39,6 +43,11 @@ COPY ./static ./static
 # Default behavior - a failure prints a stack trace for the current goroutine.
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
+ENV ELASTIC_APM_SERVICE_NAME=frontend
+ENV ELASTIC_APM_SERVER_URL=http://10.110.203.209:8200
+ENV ELASTIC_APM_SECRET_TOKEN=elastic
+ENV ELASTIC_APM_LOG_FILE=stderr 
+ENV ELASTIC_APM_LOG_LEVEL=debug
 
 EXPOSE 8080
 ENTRYPOINT ["/src/server"]

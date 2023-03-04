@@ -21,6 +21,8 @@ import (
 	"os"
 	"time"
 
+	"go.elastic.co/apm/module/apmhttp"
+
 	"cloud.google.com/go/profiler"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
@@ -154,6 +156,12 @@ func main() {
 	handler = &logHandler{log: log, next: handler}     // add logging
 	handler = ensureSessionID(handler)                 // add session ID
 	handler = otelhttp.NewHandler(handler, "frontend") // add OTel tracing
+
+	// wrapped by apm
+	handler = apmhttp.Wrap(handler)
+
+	var res = os.Getenv("ELASTIC_APM_SERVER_URL")
+	log.Info("environment variable ELASTIC_APM_SERVER_URL: ", res)
 
 	log.Infof("starting server on " + addr + ":" + srvPort)
 	log.Fatal(http.ListenAndServe(addr+":"+srvPort, handler))

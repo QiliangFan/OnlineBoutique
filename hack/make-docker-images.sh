@@ -21,6 +21,7 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 log() { echo "$1" >&2; }
 
+APM_IP=$(kubectl get service apm-server-apm-server -n observe -o jsonpath="{.spec.clusterIP}")
 TAG=0.0.1
 REPO_PREFIX=fanqiliang
 
@@ -40,6 +41,7 @@ while IFS= read -d $'\0' -r dir; do
     (
         cd "${builddir}"
         log "Building: ${image}"
+        sed -i "s|ELASTIC_APM_SERVER_URL=.\+|ELASTIC_APM_SERVER_URL=http://${APM_IP}:8200|g" Dockerfile
         docker build --pull -t "${image}" .
 
         log "Pushing: ${image}"
