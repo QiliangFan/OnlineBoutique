@@ -38,6 +38,11 @@ COPY --from=builder /checkoutservice /src/checkoutservice
 # Default behavior - a failure prints a stack trace for the current goroutine.
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
+ENV ELASTIC_APM_SERVICE_NAME=checkoutservice
+ENV ELASTIC_APM_SERVER_URL=http://10.107.119.172:8200
+ENV ELASTIC_APM_SECRET_TOKEN=elastic
+ENV ELASTIC_APM_LOG_FILE=stderr 
+ENV ELASTIC_APM_LOG_LEVEL=debug
 
 EXPOSE 5050
 ENTRYPOINT ["/src/checkoutservice"]
