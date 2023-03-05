@@ -14,6 +14,12 @@ description = 'Ad Service'
 group = "adservice"
 version = "0.1.0-SNAPSHOT"
 
+def apm_svc_name = "$System.env.ELASTIC_APM_SERVICE_NAME"
+def apm_server_url = "$System.env.ELASTIC_APM_SERVER_URL"
+def apm_token = "$System.env.ELASTIC_APM_SECRET_TOKEN"
+def apm_log_file = "$System.env.ELASTIC_APM_LOG_FILE"
+def apm_log_level = "$System.env.ELASTIC_APM_LOG_LEVEL"
+
 def grpcVersion = "1.53.0"
 def jacksonCoreVersion = "2.14.2"
 def jacksonDatabindVersion = "2.14.2"
@@ -99,7 +105,14 @@ task adService(type: CreateStartScripts) {
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
     defaultJvmOpts =
-             ["-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adservice,-cprof_service_version=1.0.0"]
+             [
+                "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adservice,-cprof_service_version=1.0.0",
+                "-javaagent:/elastic-apm-agent.jar",
+                "-Delastic.apm.service_name=${apm_svc_name}",
+                "-Delastic.apm.server_urls=${apm_server_url}",
+                "-Delastic.apm.log_file=${apm_log_file}",
+                "-Delastic.apm.log_level=${apm_log_level}"
+             ]
 }
 
 task adServiceClient(type: CreateStartScripts) {
@@ -108,7 +121,14 @@ task adServiceClient(type: CreateStartScripts) {
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
     defaultJvmOpts =
-             ["-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adserviceclient,-cprof_service_version=1.0.0"]
+             [
+                "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adserviceclient,-cprof_service_version=1.0.0",
+                "-javaagent:/elastic-apm-agent.jar",
+                "-Delastic.apm.service_name=${apm_svc_name}",
+                "-Delastic.apm.server_urls=${apm_server_url}",
+                "-Delastic.apm.log_file=${apm_log_file}",
+                "-Delastic.apm.log_level=${apm_log_level}"
+            ]
 }
 
 applicationDistribution.into('bin') {

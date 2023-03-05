@@ -16,12 +16,19 @@ FROM eclipse-temurin:19@sha256:a0901c0803060995ca6e13d19756e3100987101ac33e3d7eb
 
 WORKDIR /app
 
+ENV ELASTIC_APM_SERVICE_NAME=Adservice
+ENV ELASTIC_APM_SERVER_URL=http://10.107.119.172:8200
+ENV ELASTIC_APM_SECRET_TOKEN=elastic
+ENV ELASTIC_APM_LOG_FILE=stderr 
+ENV ELASTIC_APM_LOG_LEVEL=debug
+
 COPY ["build.gradle", "gradlew", "./"]
 COPY gradle gradle
 RUN chmod +x gradlew
 RUN ./gradlew downloadRepos
 
 COPY . .
+
 RUN chmod +x gradlew
 RUN ./gradlew installDist
 
@@ -37,6 +44,8 @@ RUN mkdir -p /opt/cprof && \
 
 WORKDIR /app
 COPY --from=builder /app .
+
+COPY --from=docker.elastic.co/observability/apm-agent-java:latest /usr/agent/elastic-apm-agent.jar /elastic-apm-agent.jar
 
 EXPOSE 9555
 ENTRYPOINT ["/app/build/install/hipstershop/bin/AdService"]
