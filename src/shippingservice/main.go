@@ -20,6 +20,8 @@ import (
 	"os"
 	"time"
 
+	"go.elastic.co/apm/module/apmgrpc/v2"
+
 	"cloud.google.com/go/profiler"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
@@ -82,11 +84,14 @@ func main() {
 	var srv *grpc.Server
 	if os.Getenv("DISABLE_STATS") == "" {
 		log.Info("Stats enabled, but temporarily unavailable")
-		srv = grpc.NewServer()
 	} else {
 		log.Info("Stats disabled.")
-		srv = grpc.NewServer()
 	}
+	srv = grpc.NewServer(
+		grpc.UnaryInterceptor(apmgrpc.NewUnaryServerInterceptor()),
+		grpc.StreamInterceptor(apmgrpc.NewStreamServerInterceptor()),
+	)
+
 	svc := &server{}
 	pb.RegisterShippingServiceServer(srv, svc)
 	healthpb.RegisterHealthServer(srv, svc)

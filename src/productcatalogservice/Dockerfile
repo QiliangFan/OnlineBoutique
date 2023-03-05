@@ -38,7 +38,6 @@ COPY products.json .
 # Default behavior - a failure prints a stack trace for the current goroutine.
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
-ENV GOTRACEBACK=single
 ENV ELASTIC_APM_SERVICE_NAME=productcatalog
 ENV ELASTIC_APM_SERVER_URL=http://10.110.203.209:8200
 ENV ELASTIC_APM_SECRET_TOKEN=elastic
