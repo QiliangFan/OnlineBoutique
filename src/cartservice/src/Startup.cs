@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using cartservice.cartstore;
 using cartservice.services;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Elastic.Apm.NetCoreAll;
+using Elastic.Apm.DiagnosticSource;
 
 namespace cartservice
 {
@@ -56,6 +58,7 @@ namespace cartservice
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseAllElasticApm(Configuration);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

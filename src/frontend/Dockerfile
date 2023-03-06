@@ -26,7 +26,7 @@ COPY . .
 # Skaffold passes in debug-oriented compiler flags
 ARG SKAFFOLD_GO_GCFLAGS
 ENV ELASTIC_APM_SERVICE_NAME=frontend
-ENV ELASTIC_APM_SERVER_URL=http://10.107.119.172:8200
+ENV ELASTIC_APM_SERVER_URL=http://10.99.94.215:8200
 ENV ELASTIC_APM_SECRET_TOKEN=elastic
 RUN go mod tidy
 RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /go/bin/frontend .
@@ -44,7 +44,7 @@ COPY ./static ./static
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 ENV ELASTIC_APM_SERVICE_NAME=frontend
-ENV ELASTIC_APM_SERVER_URL=http://10.107.119.172:8200
+ENV ELASTIC_APM_SERVER_URL=http://10.99.94.215:8200
 ENV ELASTIC_APM_SECRET_TOKEN=elastic
 ENV ELASTIC_APM_LOG_FILE=stderr 
 ENV ELASTIC_APM_LOG_LEVEL=debug
