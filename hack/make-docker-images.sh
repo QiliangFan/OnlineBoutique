@@ -45,6 +45,10 @@ while IFS= read -d $'\0' -r dir; do
         if [ -f appsettings.json ] ; then
             sed -i "s|\"ServerUrls\": \".\+\",|\"ServerUrls\": \"http://${APM_IP}:8200\",|g" appsettings.json
         fi
+        if [ -f server.js ] ; then
+            sed -i "s|serverUrl: '.\+'|serverUrl: 'http://${APM_IP}:8200'|g" server.js
+        fi
+
         docker build --pull -t "${image}" .
 
         log "Pushing: ${image}"

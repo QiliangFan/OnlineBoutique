@@ -12,6 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var apm = require('elastic-apm-node').start({
+
+  // Override the service name from package.json
+  // Allowed characters: a-z, A-Z, 0-9, -, _, and space
+  serviceName: 'paymentservice',
+  
+  // Use if APM Server requires a secret token
+  secretToken: 'elastic',
+  
+  // Set the custom APM Server URL (default: http://localhost:8200)
+  serverUrl: 'http://10.99.94.215:8200',
+  
+  // Set the service environment
+  environment: 'production'
+})
+
 const path = require('path');
 const grpc = require('@grpc/grpc-js');
 const pino = require('pino');

@@ -14,6 +14,23 @@
  * limitations under the License.
  */
 
+// Add this to the VERY top of the first file loaded in your app
+var apm = require('elastic-apm-node').start({
+
+  // Override the service name from package.json
+  // Allowed characters: a-z, A-Z, 0-9, -, _, and space
+  serviceName: 'currencyservice',
+  
+  // Use if APM Server requires a secret token
+  secretToken: 'elastic',
+  
+  // Set the custom APM Server URL (default: http://localhost:8200)
+  serverUrl: 'http://10.99.94.215:8200',
+  
+  // Set the service environment
+  environment: 'production'
+})
+
 if(process.env.DISABLE_PROFILER) {
   console.log("Profiler disabled.")
 }
