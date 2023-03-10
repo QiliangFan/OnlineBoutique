@@ -108,17 +108,16 @@ if __name__ == "__main__":
       grpc_client_instrumentor.instrument()
       grpc_server_instrumentor = GrpcInstrumentorServer()
       grpc_server_instrumentor.instrument()
-      if os.environ["ENABLE_TRACING"] == "1":
-        trace.set_tracer_provider(TracerProvider())
-        otel_endpoint = os.getenv("COLLECTOR_SERVICE_ADDR", "localhost:4317")
-        trace.get_tracer_provider().add_span_processor(
-          BatchSpanProcessor(
-              OTLPSpanExporter(
-              endpoint = otel_endpoint,
-              insecure = True
-            )
+      trace.set_tracer_provider(TracerProvider())
+      otel_endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "localhost:4317")
+      trace.get_tracer_provider().add_span_processor(
+        BatchSpanProcessor(
+            OTLPSpanExporter(
+            endpoint = otel_endpoint,
+            insecure = True
           )
         )
+      )
     except (KeyError, DefaultCredentialsError):
         logger.info("Tracing disabled.")
     except Exception as e:

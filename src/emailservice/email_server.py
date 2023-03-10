@@ -176,17 +176,16 @@ if __name__ == '__main__':
 
   # Tracing
   try:
-    if os.environ["ENABLE_TRACING"] == "1":
-      otel_endpoint = os.getenv("COLLECTOR_SERVICE_ADDR", "localhost:4317")
-      trace.set_tracer_provider(TracerProvider())
-      trace.get_tracer_provider().add_span_processor(
-        BatchSpanProcessor(
-            OTLPSpanExporter(
-            endpoint = otel_endpoint,
-            insecure = True
-          )
+    otel_endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "localhost:4317")
+    trace.set_tracer_provider(TracerProvider())
+    trace.get_tracer_provider().add_span_processor(
+      BatchSpanProcessor(
+          OTLPSpanExporter(
+          endpoint = otel_endpoint,
+          insecure = True
         )
       )
+    )
     grpc_server_instrumentor = GrpcInstrumentorServer()
     grpc_server_instrumentor.instrument()
 

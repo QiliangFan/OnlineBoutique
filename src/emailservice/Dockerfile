@@ -36,6 +36,11 @@ FROM base as without-grpc-health-probe-bin
 ENV PYTHONUNBUFFERED=1
 # Enable Profiler
 ENV ENABLE_PROFILER=1
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://10.99.94.215:8200
+ENV OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer elastic"
+ENV OTEL_METRICS_EXPORTER="otlp"
+ENV OTEL_LOGS_EXPORTER="otlp"
+ENV OTEL_RESOURCE_ATTRIBUTES="service.name=emailservice,service.version=0.1.0,deployment.environment=production"
 
 WORKDIR /email_server
 

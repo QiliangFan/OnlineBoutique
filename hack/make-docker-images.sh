@@ -42,6 +42,7 @@ while IFS= read -d $'\0' -r dir; do
         cd "${builddir}"
         log "Building: ${image}"
         sed -i "s|ELASTIC_APM_SERVER_URL=.\+|ELASTIC_APM_SERVER_URL=http://${APM_IP}:8200|g" Dockerfile
+        sed -i "s|OTEL_EXPORTER_OTLP_ENDPOINT=.\+|OTEL_EXPORTER_OTLP_ENDPOINT=http://${APM_IP}:8200|g" Dockerfile
         if [ -f appsettings.json ] ; then
             sed -i "s|\"ServerUrls\": \".\+\",|\"ServerUrls\": \"http://${APM_IP}:8200\",|g" appsettings.json
         fi
