@@ -45,7 +45,7 @@ RUN mkdir -p /opt/cprof && \
 WORKDIR /app
 COPY --from=builder /app .
 
-COPY --from=docker.elastic.co/observability/apm-agent-java:latest /usr/agent/elastic-apm-agent.jar /elastic-apm-agent.jar
+COPY elastic-apm-agent.jar /elastic-apm-agent.jar
 
 EXPOSE 9555
 ENTRYPOINT ["/app/build/install/hipstershop/bin/AdService"]
